@@ -125,6 +125,28 @@
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* MODAL STYLES */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal {
+            background: rgba(13, 17, 23, 0.95);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        #settingsBtn:hover { transform: rotate(90deg); }
+
         .tab-link:hover { color: var(--text-primary); background: rgba(255,255,255,0.02); }
         .tab-link.active { background: var(--accent-teal); color: #000; }
 
@@ -335,6 +357,7 @@
     <header class="header">
         <div class="badge">🎯 Advanced E-Com Intelligence</div>
         <h1 class="logo">Win<span>Find</span></h1>
+        <button id="settingsBtn" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--accent-teal); transition: transform 0.3s ease;">⚙️</button>
         <p class="tagline">The Complete Scaling Suite for Modern Sellers.</p>
     </header>
 
@@ -399,6 +422,15 @@
                     <div class="form-section-title">02 — Recommendation</div>
                     <div id="card-container"></div>
                     
+                    <div style="margin-bottom: 2rem;">
+                        <button id="aiStrategyBtn" class="btn-primary" style="background: linear-gradient(90deg, #8a2be2, #00f5a0); border: none;">
+                            <span>✨</span> Generate Smart AI Strategy
+                        </button>
+                        <div id="aiLoading" style="display: none; text-align: center; margin-top: 1rem; color: var(--accent-teal); font-size: 0.8rem; font-weight: 700;">
+                            🧠 AI Strategist is analyzing data...
+                        </div>
+                    </div>
+
                     <div class="form-section-title">03 — Financial Breakdown</div>
                     <div class="stats-grid">
                         <div class="stat-item"><span class="stat-label">Net Profit / Unit</span><span class="stat-value" id="netProfitPerUnit">$0.00</span></div>
@@ -496,20 +528,62 @@
         </main>
     </section>
 
-    <footer class="footer">
-        WinFind v4.51 • System Fully Synced • Deploy Ready.
-    </footer>
+    <!-- SETTINGS MODAL -->
+    <div id="settingsModal" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <h2 style="color: var(--accent-teal); margin-bottom: 1.5rem;">AI Strategist Settings</h2>
+            <div class="form-group">
+                <label class="label">Google Gemini API Key</label>
+                <input type="password" id="geminiKey" placeholder="Enter your key here..." style="width: 100%; box-sizing: border-box;">
+                <p style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                    Key is stored locally. Get one for free at <a href="https://aistudio.google.com/" target="_blank" style="color: var(--accent-teal);">Google AI Studio</a>.
+                </p>
+            </div>
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <button id="saveSettings" class="btn-primary">Save Key</button>
+                <button id="closeSettings" class="btn-primary" style="background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--border-color);">Close</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        /* WinFind v4 - Logic (Inlined for Cache Bypass) */
-        const products = {
-            beauty: { name: "Electric Facial Cleansing Brush", cost: 4.25, price: 24.99, trend: "trending", platform: "Amazon", buy_url: "https://www.amazon.com/s?k=electric+facial+cleansing+brush", image_url: "https://images.unsplash.com/photo-1619451334792-150fd785ee74?q=80&w=800&auto=format&fit=crop", plan: "1. Brand as luxury item. 2. Launch TikTok ads. 3. Bundle with face wash for higher AOV." },
-            fitness: { name: "Portable Pilates Bar Kit", cost: 11.50, price: 39.99, trend: "trending", platform: "Shopee", buy_url: "https://shopee.com/search?keyword=pilates+bar+kit", image_url: "https://images.unsplash.com/photo-1620188467120-5042ed1eb5da?q=80&w=800&auto=format&fit=crop", plan: "1. Target home-workouts. 2. Daily reels for social proof. 3. Upsell with a digital 30-day guide." },
-            home: { name: "Magnetic Motion Sensor Lights", cost: 3.20, price: 19.95, trend: "stable", platform: "Lazada", buy_url: "https://www.lazada.com.ph/tag/magnetic-sensor-light/", image_url: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=800&auto=format&fit=crop", plan: "1. Marketing: 'Smart home in 5s'. 2. Sell in multi-packs for volume. 3. Pinterest ads for styling." },
-            tech: { name: "Foldable 3-in-1 Wireless Charger", cost: 13.80, price: 49.00, trend: "trending", platform: "Amazon", buy_url: "https://www.amazon.com/s?k=3+in+1+wireless+charger+foldable", image_url: "https://images.unsplash.com/photo-1586953101559-4adca62362de?q=80&w=800&auto=format&fit=crop", plan: "1. Target digital nomads & techies. 2. High-quality unboxing content. 3. Google Search ads for travel." },
-            pets: { name: "Self-Cleaning Slicker Brush", cost: 2.10, price: 18.50, trend: "stable", platform: "Shopee", buy_url: "https://shopee.com/search?keyword=self+cleaning+pet+brush", image_url: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=800&auto=format&fit=crop", plan: "1. Highlight 'One-Click' utility. 2. Partner with pet influencers. 3. Facebook ads for cat/dog owners." },
-            kids: { name: "Reusable Water Coloring Book", cost: 1.50, price: 14.99, trend: "stable", platform: "Lazada", buy_url: "https://www.lazada.com.ph/tag/water-coloring-book/", image_url: "https://images.unsplash.com/photo-1560421683-6856ea585c78?q=80&w=800&auto=format&fit=crop", plan: "1. Focus on 'Mess-Free' travel. 2. Amazon PPC for travel games. 3. Target parents of toddlers." },
-            food: { name: "Portable Electric Milk Frother", cost: 2.50, price: 15.00, trend: "saturated", platform: "Other", buy_url: "https://www.google.com/search?q=electric+milk+frother&tbm=shop", image_url: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=800&auto=format&fit=crop", plan: "1. Appeal to 'Coffee at Home'. 2. Create latte-art shorts. 3. Kitchen gadget bundles and gifting." }
+        /* WinFind v4.6 - Expanded Tiered Database */
+        const product_database = {
+            beauty: [
+                { minProfit: 0, name: "Electric Facial Cleansing Brush", cost: 4.25, price: 24.99, trend: "trending", platform: "Amazon", buy_url: "https://www.amazon.com/s?k=electric+facial+cleansing+brush", image_url: "https://images.unsplash.com/photo-1619451334792-150fd785ee74?q=80&w=800&auto=format&fit=crop", plan: "Starter Strategy: Focus on TikTok micro-influencers. High-volume, low-risk cleansing tool." },
+                { minProfit: 3000, name: "LED 7-Color Light Therapy Mask", cost: 18.50, price: 79.00, trend: "trending", platform: "Shopee", buy_url: "https://shopee.com/search?keyword=led+therapy+mask", image_url: "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?q=80&w=800&auto=format&fit=crop", plan: "Pro Strategy: Target skincare enthusiasts with before/after results. Higher AOV and scaling potential." },
+                { minProfit: 10000, name: "Professional Home Laser Hair Removal", cost: 45.00, price: 249.00, trend: "trending", platform: "Other", buy_url: "https://www.google.com/search?q=professional+laser+hair+removal+device&tbm=shop", image_url: "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?q=80&w=800&auto=format&fit=crop", plan: "Scaling Strategy: High-ticket item. Requires professional sales copy and long-form video ads." }
+            ],
+            fitness: [
+                { minProfit: 0, name: "Portable Pilates Bar Kit", cost: 11.50, price: 39.99, trend: "trending", platform: "Shopee", buy_url: "https://shopee.com/search?keyword=pilates+bar+kit", image_url: "https://images.unsplash.com/photo-1620188467120-5042ed1eb5da?q=80&w=800&auto=format&fit=crop", plan: "Starter Strategy: Home-workout reels. Easy gift for fitness beginners." },
+                { minProfit: 3000, name: "Adjustable Weighted Running Vest", cost: 22.00, price: 85.00, trend: "stable", platform: "Amazon", buy_url: "https://www.amazon.com/s?k=adjustable+weighted+vest", image_url: "https://images.unsplash.com/photo-1594381898411-846e7d193883?q=80&w=800&auto=format&fit=crop", plan: "Pro Strategy: Target outdoor runners and crossfitters. Emphasize durability and calorie burn." },
+                { minProfit: 10000, name: "Compact 2-in-1 Folding Treadmill", cost: 110.00, price: 499.00, trend: "trending", platform: "Amazon", buy_url: "https://www.amazon.com/s?k=folding+treadmill+under+desk", image_url: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=800&auto=format&fit=crop", plan: "Scaling Strategy: High-ticket scaling. Target digital nomads and office workers with 'Under-Desk' setup." }
+            ],
+            home: [
+                { minProfit: 0, name: "Magnetic Motion Sensor Lights", cost: 3.20, price: 19.95, trend: "stable", platform: "Lazada", buy_url: "https://www.lazada.com.ph/tag/magnetic-sensor-light/", image_url: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=800&auto=format&fit=crop", plan: "Starter Strategy: Pinterest ads for home decor and safety. Sell in multi-packs." },
+                { minProfit: 3000, name: "Aroma Diffuser & Smart Humidifier", cost: 14.50, price: 65.00, trend: "stable", platform: "Amazon", buy_url: "https://www.amazon.com/s?k=smart+aroma+diffuser", image_url: "https://images.unsplash.com/photo-1602928294221-441857b98dec?q=80&w=800&auto=format&fit=crop", plan: "Pro Strategy: Focus on 'Relaxation & Wellness'. Upsell with essential oil bundles." },
+                { minProfit: 10000, name: "Smart HEPA Air Purifier (Home Pro)", cost: 48.00, price: 199.00, trend: "trending", platform: "Other", buy_url: "https://www.google.com/search?q=smart+hepa+air+purifier&tbm=shop", image_url: "https://images.unsplash.com/photo-1585771724684-38269d6639fd?q=80&w=800&auto=format&fit=crop", plan: "Scaling Strategy: Health-focused marketing. Target parents and allergics with clean-air metrics." }
+            ],
+            tech: [
+                { minProfit: 0, name: "Foldable 3-in-1 Wireless Charger", cost: 13.80, price: 49.00, trend: "trending", platform: "Amazon", buy_url: "https://www.amazon.com/s?k=3+in+1+wireless+charger+foldable", image_url: "https://images.unsplash.com/photo-1586953101559-4adca62362de?q=80&w=800&auto=format&fit=crop", plan: "Starter Strategy: Desktop unboxing content. Target techies and nomads." },
+                { minProfit: 3000, name: "Laptop Triple Screen Extender Pro", cost: 42.00, price: 159.00, trend: "trending", platform: "Amazon", buy_url: "https://www.amazon.com/s?k=triple+screen+laptop+extender", image_url: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?q=80&w=800&auto=format&fit=crop", plan: "Pro Strategy: Target remote workers. Emphasize 300% productivity boost with portable screens." },
+                { minProfit: 10000, name: "EcoFlow Portable Power Station", cost: 140.00, price: 549.00, trend: "trending", platform: "Other", buy_url: "https://www.google.com/search?q=portable+power+station+256wh&tbm=shop", image_url: "https://images.unsplash.com/photo-1621360841013-c7683c659ec6?q=80&w=800&auto=format&fit=crop", plan: "Scaling Strategy: High-ticket outdoor scaling. Target campers and emergency prep enthusiasts." }
+            ],
+            pets: [
+                { minProfit: 0, name: "Self-Cleaning Slicker Brush", cost: 2.10, price: 18.50, trend: "stable", platform: "Shopee", buy_url: "https://shopee.com/search?keyword=self+cleaning+pet+brush", image_url: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=800&auto=format&fit=crop", plan: "Starter Strategy: One-click cleaning utility. Focus on pet-owner convenience in social ads." },
+                { minProfit: 3000, name: "Automated WiFi Smart Pet Feeder", cost: 24.50, price: 95.00, trend: "stable", platform: "Amazon", buy_url: "https://www.amazon.com/s?k=wifi+smart+pet+feeder", image_url: "https://images.unsplash.com/photo-1582213706003-8820c7cc6ec8?q=80&w=800&auto=format&fit=crop", plan: "Pro Strategy: App-control feature marketing. Target busy professionals who leave pets alone." },
+                { minProfit: 10000, name: "Self-Cleaning Automatic Litter Box", cost: 125.00, price: 449.00, trend: "trending", platform: "Shopee", buy_url: "https://shopee.com/search?keyword=automatic+cat+litter+box", image_url: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=800&auto=format&fit=crop", plan: "Scaling Strategy: Zero-odor, zero-hassle scaling. High-ticket item with massive Facebook ad potential." }
+            ],
+            kids: [
+                { minProfit: 0, name: "Reusable Water Coloring Book", cost: 1.50, price: 14.99, trend: "stable", platform: "Lazada", buy_url: "https://www.lazada.com.ph/tag/water-coloring-book/", image_url: "https://images.unsplash.com/photo-1560421683-6856ea585c78?q=80&w=800&auto=format&fit=crop", plan: "Starter Strategy: Mess-free travel play. High-volume gift item for parents of toddlers." },
+                { minProfit: 3000, name: "Magnetic Building Tiles (120 Piece)", cost: 16.00, price: 79.99, trend: "stable", platform: "Amazon", buy_url: "https://www.amazon.com/s?k=magnetic+tiles+set", image_url: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?q=80&w=800&auto=format&fit=crop", plan: "Pro Strategy: STEM learning angle. Target parents looking for brain-development toys." },
+                { minProfit: 10000, name: "Premium Wooden Play Adventure House", cost: 130.00, price: 399.00, trend: "stable", platform: "Other", buy_url: "https://www.google.com/search?q=outdoor+wooden+playhouse+for+kids&tbm=shop", image_url: "https://images.unsplash.com/photo-1520209759809-a9bcb6cb3241?q=80&w=800&auto=format&fit=crop", plan: "Scaling Strategy: High-ticket backyard scaling. Summer-season seasonal scaling winner." }
+            ],
+            food: [
+                { minProfit: 0, name: "Portable Electric Milk Frother", cost: 2.50, price: 15.00, trend: "saturated", platform: "Other", buy_url: "https://www.google.com/search?q=electric+milk+frother&tbm=shop", image_url: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=800&auto=format&fit=crop", plan: "Starter Strategy: Daily coffee rituals. Great upsell for kitchen niche stores." },
+                { minProfit: 3000, name: "Portable Travel Espresso Maker", cost: 28.00, price: 115.00, trend: "trending", platform: "Amazon", buy_url: "https://www.amazon.com/s?k=portable+espresso+maker", image_url: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?q=80&w=800&auto=format&fit=crop", plan: "Pro Strategy: Target outdoor adventurers and campers. High quality 'Nespresso-on-the-go' angle." },
+                { minProfit: 10000, name: "All-in-One Smart Air Fryer Oven Pro", cost: 65.00, price: 219.00, trend: "trending", platform: "Other", buy_url: "https://www.google.com/search?q=all+in+one+air+fryer+oven&tbm=shop", image_url: "https://images.unsplash.com/photo-1626078436898-75c131498b96?q=80&w=800&auto=format&fit=crop", plan: "Scaling Strategy: Big-ticket kitchen winner. Focus on 'Smart Healthy Cooking' and saving electricity." }
+            ]
         };
 
         let savedProducts = JSON.parse(localStorage.getItem('winfind_v4_saved')) || [];
@@ -535,7 +609,95 @@
             });
         });
 
+        /* SETTINGS & MODAL LOGIC */
+        const settingsModal = document.getElementById('settingsModal');
+        document.getElementById('settingsBtn').addEventListener('click', () => {
+            document.getElementById('geminiKey').value = localStorage.getItem('winfind_gemini_key') || '';
+            settingsModal.style.display = 'flex';
+        });
+        document.getElementById('closeSettings').addEventListener('click', () => settingsModal.style.display = 'none');
+        document.getElementById('saveSettings').addEventListener('click', () => {
+            const key = document.getElementById('geminiKey').value.trim();
+            localStorage.setItem('winfind_gemini_key', key);
+            alert('Settings Saved! 🛡️');
+            settingsModal.style.display = 'none';
+        });
+
+        /* AI STRATEGIST ENGINE */
+        const aiStrategyBtn = document.getElementById('aiStrategyBtn');
+        const aiLoading = document.getElementById('aiLoading');
+
+        const generateAIStrategy = async () => {
+            const apiKey = localStorage.getItem('winfind_gemini_key');
+            if (!apiKey) {
+                alert('Please ⚙️ click on Settings and enter your Gemini API Key first!');
+                return;
+            }
+
+            const profit = document.getElementById('targetProfit').value;
+            const spend = document.getElementById('adSpend').value;
+            const niche = document.getElementById('niche').value;
+            
+            if (!currentRecommendation) return;
+
+            aiStrategyBtn.disabled = true;
+            aiLoading.style.display = 'block';
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: `Act as a senior e-commerce scaling expert. 
+                                Product: ${currentRecommendation.name}
+                                Niche: ${niche}
+                                Target Profit: $${profit}
+                                Monthly Ad Spend: $${spend}
+                                
+                                Task: Generate a high-impact scaling strategy in exactly 3 sections:
+                                1. SCALING ROADMAP: Step-by-step how to reach the profit goal.
+                                2. UNIQUE SELLING PROPOSITION (USP): One clear angle to beat competitors.
+                                3. AD COPY: One compelling TikTok/FB ad caption.
+                                Format in clean Markdown only.`
+                            }]
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                const aiText = data.candidates[0].content.parts[0].text;
+                
+                // Render AI Response
+                const aiResultDiv = document.createElement('div');
+                aiResultDiv.className = 'progress-card';
+                aiResultDiv.style.marginTop = '1.5rem';
+                aiResultDiv.style.border = '1px solid var(--accent-teal)';
+                aiResultDiv.style.whiteSpace = 'pre-wrap';
+                aiResultDiv.style.fontSize = '0.9rem';
+                aiResultDiv.style.color = '#fff';
+                aiResultDiv.innerHTML = `<h3 style="color: var(--accent-teal); margin-bottom: 1rem;">✨ AI Master Strategy</h3>${aiText}`;
+                
+                // Replace old AI results if any
+                const existing = document.getElementById('aiResponseArea');
+                if (existing) existing.remove();
+                aiResultDiv.id = 'aiResponseArea';
+                aiStrategyBtn.parentElement.appendChild(aiResultDiv);
+
+            } catch (err) {
+                console.error(ai_error = err);
+                alert('AI Sync Failed. Check your API Key or internet connection.');
+            } finally {
+                aiStrategyBtn.disabled = false;
+                aiLoading.style.display = 'none';
+            }
+        };
+
+        aiStrategyBtn.addEventListener('click', generateAIStrategy);
+
         const renderProductCard = (p) => {
+            currentRecommendation = p;
             const cacheBuster = `?v=${Date.now()}`;
             return `<div class="product-card">
                 <div class="img-container">
@@ -577,7 +739,11 @@
             const adSpend = parseFloat(document.getElementById('adSpend').value) || 0;
             const shipping = parseFloat(document.getElementById('shippingCost').value) || 0;
             const nicheKey = document.getElementById('niche').value;
-            const product = products[nicheKey];
+
+            // TIERED SELECTION LOGIC
+            const tierBatch = product_database[nicheKey];
+            const product = tierBatch.sort((a,b) => b.minProfit - a.minProfit).find(p => targetProfit >= p.minProfit) || tierBatch[0];
+            
             currentTarget = targetProfit;
             const netProfitPerUnit = product.price - product.cost - shipping;
             const unitsNeeded = Math.ceil((targetProfit + adSpend) / netProfitPerUnit);
