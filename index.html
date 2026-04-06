@@ -238,8 +238,49 @@
         .trend-stable { color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.2); }
         .trend-saturated { color: var(--danger); border: 1px solid rgba(255, 77, 77, 0.2); }
 
-        .product-card { background: rgba(255, 255, 255, 0.015); border: 1px solid var(--border-color); border-radius: 20px; overflow: hidden; margin-bottom: 2.5rem; }
-        .product-card img { width: 100%; height: 220px; object-fit: cover; filter: brightness(0.8); }
+        /* LAYERED IMAGE SYSTEM */
+        .img-container {
+            width: 100%;
+            height: 220px;
+            position: relative;
+            background: rgba(0, 245, 160, 0.05); /* Subtle fallback tint */
+            overflow: hidden;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .img-fallback {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            gap: 10px;
+        }
+
+        .img-fallback span {
+            font-size: 10px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.8;
+        }
+
+        .product-card img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            filter: brightness(0.85);
+        }
+
+        .product-card img.loaded { opacity: 1; }
+        .product-card img.hidden { display: none; }
         .product-info { padding: 2rem; }
         .product-info h3 { font-size: 1.75rem; font-weight: 800; color: var(--accent-teal); margin-bottom: 0.75rem; letter-spacing: -0.02em; }
         .product-info p { font-family: 'JetBrains Mono', monospace; color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem; opacity: 0.9; }
@@ -456,19 +497,19 @@
     </section>
 
     <footer class="footer">
-        WinFind v4.0 • System Synced • Ready.
+        WinFind v4.51 • System Fully Synced • Deploy Ready.
     </footer>
 
     <script>
         /* WinFind v4 - Logic (Inlined for Cache Bypass) */
         const products = {
-            beauty: { name: "Electric Facial Cleansing Brush", cost: 4.25, price: 24.99, trend: "trending", platform: "Amazon", buy_url: "https://www.amazon.com/s?k=electric+facial+cleansing+brush", image_url: "https://picsum.photos/seed/beauty/800/600", plan: "1. Brand as luxury item. 2. Launch TikTok ads. 3. Bundle with face wash for higher AOV." },
-            fitness: { name: "Portable Pilates Bar Kit", cost: 11.50, price: 39.99, trend: "trending", platform: "Shopee", buy_url: "https://shopee.com/search?keyword=pilates+bar+kit", image_url: "https://picsum.photos/seed/fitness/800/600", plan: "1. Target home-workouts. 2. Daily reels for social proof. 3. Upsell with a digital 30-day guide." },
-            home: { name: "Magnetic Motion Sensor Lights", cost: 3.20, price: 19.95, trend: "stable", platform: "Lazada", buy_url: "https://www.lazada.com.ph/tag/magnetic-sensor-light/", image_url: "https://picsum.photos/seed/home/800/600", plan: "1. Marketing: 'Smart home in 5s'. 2. Sell in multi-packs for volume. 3. Pinterest ads for styling." },
-            tech: { name: "Foldable 3-in-1 Wireless Charger", cost: 13.80, price: 49.00, trend: "trending", platform: "Amazon", buy_url: "https://www.amazon.com/s?k=3+in+1+wireless+charger+foldable", image_url: "https://picsum.photos/seed/tech/800/600", plan: "1. Target digital nomads & techies. 2. High-quality unboxing content. 3. Google Search ads for travel." },
-            pets: { name: "Self-Cleaning Slicker Brush", cost: 2.10, price: 18.50, trend: "stable", platform: "Shopee", buy_url: "https://shopee.com/search?keyword=self+cleaning+pet+brush", image_url: "https://picsum.photos/seed/pets/800/600", plan: "1. Highlight 'One-Click' utility. 2. Partner with pet influencers. 3. Facebook ads for cat/dog owners." },
-            kids: { name: "Reusable Water Coloring Book", cost: 1.50, price: 14.99, trend: "stable", platform: "Lazada", buy_url: "https://www.lazada.com.ph/tag/water-coloring-book/", image_url: "https://picsum.photos/seed/kids/800/600", plan: "1. Focus on 'Mess-Free' travel. 2. Amazon PPC for travel games. 3. Target parents of toddlers." },
-            food: { name: "Portable Electric Milk Frother", cost: 2.50, price: 15.00, trend: "saturated", platform: "Other", buy_url: "https://www.google.com/search?q=electric+milk+frother&tbm=shop", image_url: "https://picsum.photos/seed/food/800/600", plan: "1. Appeal to 'Coffee at Home'. 2. Create latte-art shorts. 3. Kitchen gadget bundles and gifting." }
+            beauty: { name: "Electric Facial Cleansing Brush", cost: 4.25, price: 24.99, trend: "trending", platform: "Amazon", buy_url: "https://www.amazon.com/s?k=electric+facial+cleansing+brush", image_url: "https://images.unsplash.com/photo-1619451334792-150fd785ee74?q=80&w=800&auto=format&fit=crop", plan: "1. Brand as luxury item. 2. Launch TikTok ads. 3. Bundle with face wash for higher AOV." },
+            fitness: { name: "Portable Pilates Bar Kit", cost: 11.50, price: 39.99, trend: "trending", platform: "Shopee", buy_url: "https://shopee.com/search?keyword=pilates+bar+kit", image_url: "https://images.unsplash.com/photo-1620188467120-5042ed1eb5da?q=80&w=800&auto=format&fit=crop", plan: "1. Target home-workouts. 2. Daily reels for social proof. 3. Upsell with a digital 30-day guide." },
+            home: { name: "Magnetic Motion Sensor Lights", cost: 3.20, price: 19.95, trend: "stable", platform: "Lazada", buy_url: "https://www.lazada.com.ph/tag/magnetic-sensor-light/", image_url: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=800&auto=format&fit=crop", plan: "1. Marketing: 'Smart home in 5s'. 2. Sell in multi-packs for volume. 3. Pinterest ads for styling." },
+            tech: { name: "Foldable 3-in-1 Wireless Charger", cost: 13.80, price: 49.00, trend: "trending", platform: "Amazon", buy_url: "https://www.amazon.com/s?k=3+in+1+wireless+charger+foldable", image_url: "https://images.unsplash.com/photo-1586953101559-4adca62362de?q=80&w=800&auto=format&fit=crop", plan: "1. Target digital nomads & techies. 2. High-quality unboxing content. 3. Google Search ads for travel." },
+            pets: { name: "Self-Cleaning Slicker Brush", cost: 2.10, price: 18.50, trend: "stable", platform: "Shopee", buy_url: "https://shopee.com/search?keyword=self+cleaning+pet+brush", image_url: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=800&auto=format&fit=crop", plan: "1. Highlight 'One-Click' utility. 2. Partner with pet influencers. 3. Facebook ads for cat/dog owners." },
+            kids: { name: "Reusable Water Coloring Book", cost: 1.50, price: 14.99, trend: "stable", platform: "Lazada", buy_url: "https://www.lazada.com.ph/tag/water-coloring-book/", image_url: "https://images.unsplash.com/photo-1560421683-6856ea585c78?q=80&w=800&auto=format&fit=crop", plan: "1. Focus on 'Mess-Free' travel. 2. Amazon PPC for travel games. 3. Target parents of toddlers." },
+            food: { name: "Portable Electric Milk Frother", cost: 2.50, price: 15.00, trend: "saturated", platform: "Other", buy_url: "https://www.google.com/search?q=electric+milk+frother&tbm=shop", image_url: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=800&auto=format&fit=crop", plan: "1. Appeal to 'Coffee at Home'. 2. Create latte-art shorts. 3. Kitchen gadget bundles and gifting." }
         };
 
         let savedProducts = JSON.parse(localStorage.getItem('winfind_v4_saved')) || [];
@@ -495,16 +536,18 @@
         });
 
         const renderProductCard = (p) => {
-            const svgFallback = `<div style="width:100%; height:220px; background:rgba(0,245,160,0.05); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; border-bottom:1px solid var(--border-color);">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--accent-teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
-                <span style="font-size:10px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.1em;">Asset Syncing...</span>
-            </div>`;
-
+            const cacheBuster = `?v=${Date.now()}`;
             return `<div class="product-card">
-                <div class="img-wrapper" id="img-target-${Math.random().toString(36).substr(2, 9)}">
-                    <img src="${p.image_url}" alt="${p.name}" loading="lazy" referrerpolicy="no-referrer" 
-                         onerror="this.parentElement.innerHTML='${svgFallback.replace(/'/g, "\\'").replace(/\n/g, "")}';" 
-                         onload="this.style.opacity=1" style="opacity:0; transition: opacity 0.5s;" />
+                <div class="img-container">
+                    <div class="img-fallback">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent-teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+                        <span>Syncing Asset...</span>
+                    </div>
+                    <img src="${p.image_url}${cacheBuster}" 
+                         alt="${p.name}" 
+                         onload="this.classList.add('loaded')" 
+                         onerror="this.classList.add('hidden')" 
+                         referrerpolicy="no-referrer" />
                 </div>
                 <div class="product-info">
                   <h3>${p.name}<span class="trend-badge trend-${p.trend}">${p.trend}</span></h3>
