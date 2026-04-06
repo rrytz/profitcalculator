@@ -188,6 +188,17 @@
         WinFind v4.0 • Local Storage Engaged • PDF Engine Ready.
     </footer>
 
+    <script>
+        // System Self-Heal: Clear old local image paths from storage to ensure new Unsplash URLs take over
+        (function() {
+            const saved = localStorage.getItem('winfind_v4_saved');
+            if (saved && saved.includes('images/')) {
+                console.log("System: Detected old image paths. Syncing to cloud assets...");
+                localStorage.removeItem('winfind_v4_saved');
+                // We keep sales history and target, only clearing the product recommendations to force a refresh
+            }
+        })();
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
