@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WinFind | Advanced E-Com Intelligence</title>
+    <meta name="description" content="WinFind: The advanced AI-powered profit suite for scaling your e-commerce business.">
+    
+    <!-- External Libraries for Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="badge">🎯 Advanced E-Com Intelligence</div>
+        <h1 class="logo">Win<span>Find</span></h1>
+        <p class="tagline">The Complete Scaling Suite for Modern Sellers.</p>
+    </header>
+
+    <nav class="tabs">
+        <button class="tab-link active" data-tab="tab-calculator">📱 Calculator</button>
+        <button class="tab-link" data-tab="tab-compare">📈 Comparison</button>
+        <button class="tab-link" data-tab="tab-tracker">🎯 Tracker</button>
+    </nav>
+
+    <!-- TAB 1: CALCULATOR -->
+    <section id="tab-calculator" class="tab-content active">
+        <main class="container">
+            <div id="export-area">
+                <div class="form-section-title">01 — Goals & Expenses</div>
+                <form id="calculator-form">
+                    <div class="form-group">
+                        <label class="label">Target Monthly Profit</label>
+                        <div class="input-wrapper has-prefix">
+                            <span class="input-prefix">$</span>
+                            <input type="number" id="targetProfit" placeholder="e.g. 5000" required min="1">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label class="label">Monthly Ad Spend</label>
+                            <div class="input-wrapper has-prefix">
+                                <span class="input-prefix">$</span>
+                                <input type="number" id="adSpend" placeholder="e.g. 500">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="label">Shipping Cost / Unit</label>
+                            <div class="input-wrapper has-prefix">
+                                <span class="input-prefix">$</span>
+                                <input type="number" id="shippingCost" placeholder="e.g. 5" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Choose Your Niche</label>
+                        <div class="input-wrapper">
+                            <select id="niche" required>
+                                <option value="" disabled selected>— Choose niche —</option>
+                                <option value="beauty">💄 Beauty & Skincare</option>
+                                <option value="fitness">🏋️ Fitness & Health</option>
+                                <option value="home">🏠 Home & Living</option>
+                                <option value="tech">📱 Tech Accessories</option>
+                                <option value="pets">🐾 Pets</option>
+                                <option value="kids">🧸 Kids & Baby</option>
+                                <option value="food">🍵 Food & Beverage</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <span>🔍</span> Find Winning Product
+                    </button>
+                </form>
+
+                <div id="results" style="display: none;">
+                    <div class="form-section-title">02 — Recommendation</div>
+                    <div id="card-container"></div>
+                    
+                    <div class="form-section-title">03 — Financial Breakdown</div>
+                    <div class="stats-grid">
+                        <div class="stat-item"><span class="stat-label">Net Profit / Unit</span><span class="stat-value" id="netProfitPerUnit">$0.00</span></div>
+                        <div class="stat-item"><span class="stat-label">Units Needed</span><span class="stat-value" id="unitsNeeded">0</span></div>
+                        <div class="stat-item"><span class="stat-label">Total Revenue</span><span class="stat-value" id="totalRevenue">$0.00</span></div>
+                        <div class="stat-item"><span class="stat-label">Product Margin</span><span class="stat-value" id="netMargin">0%</span></div>
+                    </div>
+                    
+                    <div class="form-section-title">04 — Sourcing & Logistics</div>
+                    <div id="sourcing-container"></div>
+
+                    <div class="action-plan">
+                        <strong>Strategy & Steps:</strong>
+                        <div id="planText"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="post-calculate-actions" style="display: none; margin-top: 2rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <button id="saveProductBtn" class="btn-secondary">💾 Save to List</button>
+                    <button id="exportPdfBtn" class="btn-primary" style="margin-top: 1rem;">📄 Export PDF</button>
+                </div>
+            </div>
+        </main>
+    </section>
+
+    <!-- TAB 2: COMPARISON -->
+    <section id="tab-compare" class="tab-content">
+        <main class="container">
+            <div class="form-section-title">Comparison Dashboard</div>
+            <div class="compare-container">
+                <table id="compareTable">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Niche</th>
+                            <th>Cost</th>
+                            <th>Net Prof</th>
+                            <th>Units</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="compareList"></tbody>
+                </table>
+                <div id="compareEmpty" style="text-align: center; color: var(--text-secondary); margin-top: 2rem;">
+                    No products saved for comparison.
+                </div>
+            </div>
+        </main>
+    </section>
+
+    <!-- TAB 3: TRACKER -->
+    <section id="tab-tracker" class="tab-content">
+        <main class="container">
+            <div class="form-section-title">Current Profit Goal 🚀</div>
+            <div id="trackerOverview" class="progress-card">
+                <div class="progress-header">
+                    <span class="progress-title">Target Goal Status</span>
+                    <span id="progressPercent" class="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div id="progressFill" class="progress-fill"></div>
+                </div>
+                <div id="progressStats" class="progress-stats">$0 / $0 Earned</div>
+            </div>
+
+            <div class="form-section-title">Log New Sales</div>
+            <form id="trackerForm">
+                <div class="form-group">
+                    <label class="label">Found Item</label>
+                    <select id="trackerProduct" required>
+                        <option value="" disabled selected>— Select Product —</option>
+                    </select>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label class="label">Units Sold</label>
+                        <input type="number" id="unitsSold" required min="1">
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Date</label>
+                        <input type="date" id="saleDate" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Add Entry</button>
+            </form>
+
+            <div class="history-title">History Logs</div>
+            <div id="historyList"></div>
+        </main>
+    </section>
+
+    <footer class="footer">
+        WinFind v4.0 • Local Storage Engaged • PDF Engine Ready.
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

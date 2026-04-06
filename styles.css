@@ -1,0 +1,238 @@
+/* WinFind v4 - Advanced Suite Styles */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap');
+
+:root {
+  --bg-color: #050508;
+  --card-bg: #0e0e14;
+  --input-bg: rgba(255, 255, 255, 0.015);
+  --accent-teal: #00f5a0;
+  --accent-glow: rgba(0, 245, 160, 0.15);
+  --text-primary: #ffffff;
+  --text-secondary: #8e8e9a;
+  --border-color: rgba(255, 255, 255, 0.05);
+  --danger: #ff4d4d;
+  --success: #00f5a0;
+  --warning: #ffcc00;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 10px;
+}
+
+/* Tabs & Logic Hooks */
+.tabs {
+  display: flex;
+  gap: 6px;
+  background: var(--card-bg);
+  padding: 5px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 2.5rem;
+  width: 100%;
+  max-width: 580px;
+}
+
+.tab-link {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-link:hover { color: var(--text-primary); background: rgba(255,255,255,0.02); }
+.tab-link.active { background: var(--accent-teal); color: #000; }
+
+.tab-content { display: none; width: 100%; max-width: 580px; animation: slideUp 0.4s ease-out; }
+.tab-content.active { display: block; }
+
+@keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Header Branding */
+.header { text-align: center; margin-bottom: 2rem; }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(0, 245, 160, 0.05);
+  border: 1px solid rgba(0, 245, 160, 0.15);
+  color: var(--success);
+  font-size: 0.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 5px 12px;
+  border-radius: 100px;
+  margin-bottom: 1.25rem;
+}
+
+.logo { font-size: 3.5rem; font-weight: 800; letter-spacing: -0.05em; margin-bottom: 0.25rem; }
+.logo span { color: var(--accent-teal); }
+.tagline { color: var(--text-secondary); font-size: 0.9rem; font-weight: 400; opacity: 0.8; }
+
+/* Main Glass Container */
+.container {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 50px 120px -30px rgba(0, 0, 0, 0.8);
+}
+
+.form-section-title {
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.form-section-title::after { content: ""; height: 1px; flex: 1; background: var(--border-color); margin-left: 1.25rem; }
+
+/* Form Controls */
+.form-group { margin-bottom: 1.75rem; }
+.label { display: block; font-size: 0.7rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.75rem; opacity: 0.7; }
+
+.input-wrapper { position: relative; display: flex; align-items: center; }
+.input-prefix { position: absolute; left: 1.25rem; color: var(--accent-teal); font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+
+input, select {
+  width: 100%;
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  color: var(--text-primary);
+  padding: 1.15rem 1.25rem;
+  font-size: 1.1rem;
+  font-family: 'JetBrains Mono', monospace;
+  transition: border-color 0.2s;
+}
+
+.has-prefix input { padding-left: 2.25rem; }
+input:focus, select:focus { outline: none; border-color: var(--accent-teal); }
+
+select option { background: #121218; color: #fff; }
+
+/* Buttons */
+.btn-primary {
+  width: 100%;
+  background-color: var(--accent-teal);
+  color: #000;
+  border: none;
+  border-radius: 12px;
+  padding: 1.25rem;
+  font-size: 1.1rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-primary:active { transform: scale(0.98); }
+.btn-primary:hover { box-shadow: 0 0 25px var(--accent-glow); filter: brightness(1.1); }
+
+.btn-secondary {
+  width: 100%;
+  background: transparent;
+  color: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-secondary:hover { border-color: var(--accent-teal); background: rgba(255,255,255,0.03); }
+
+/* Badges & Markers */
+.trend-badge { font-size: 0.6rem; font-weight: 800; padding: 4px 10px; border-radius: 100px; margin-left: 10px; text-transform: uppercase; background: rgba(255,255,255,0.05); }
+.trend-trending { color: var(--success); border: 1px solid rgba(0, 245, 160, 0.2); background: rgba(0, 245, 160, 0.05); }
+.trend-stable { color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.2); }
+.trend-saturated { color: var(--danger); border: 1px solid rgba(255, 77, 77, 0.2); }
+
+/* Cards & Stats */
+.product-card { background: rgba(255, 255, 255, 0.015); border: 1px solid var(--border-color); border-radius: 20px; overflow: hidden; margin-bottom: 2.5rem; }
+.product-card img { width: 100%; height: 220px; object-fit: cover; filter: brightness(0.8); }
+.product-info { padding: 2rem; }
+.product-info h3 { font-size: 1.75rem; font-weight: 800; color: var(--accent-teal); margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+.product-info p { font-family: 'JetBrains Mono', monospace; color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem; opacity: 0.9; }
+
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 2.5rem; }
+.stat-item { background: rgba(255, 255, 255, 0.02); padding: 1.25rem; border: 1px solid var(--border-color); border-radius: 14px; }
+.stat-label { font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 0.5rem; }
+.stat-value { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 1.1rem; color: var(--success); }
+
+/* Sourcing Logistics Card */
+.sourcing-card { background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.01) 100%); border: 1px solid var(--border-color); border-radius: 16px; padding: 2rem; margin-bottom: 2.5rem; border-left: 4px solid var(--accent-teal); }
+.sourcing-title { font-size: 1rem; font-weight: 800; margin-bottom: 1rem; color: #fff; }
+.sourcing-links { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+.source-btn { background: rgba(255,255,255,0.04); color: var(--text-primary); text-decoration: none; padding: 0.75rem; border-radius: 10px; font-size: 0.75rem; font-weight: 700; text-align: center; border: 1px solid var(--border-color); transition: 0.2s; }
+.source-btn:hover { background: rgba(255,255,255,0.08); border-color: var(--accent-teal); }
+
+/* Tracker Elements */
+.progress-card { background: rgba(0, 245, 160, 0.02); border: 1px dashed var(--accent-teal); border-radius: 20px; padding: 2.5rem; margin-bottom: 2.5rem; text-align: center; }
+.progress-percent { font-size: 3rem; font-weight: 800; color: var(--accent-teal); display: block; margin-bottom: 1rem; }
+.progress-bar { height: 14px; background: rgba(255,255,255,0.04); border-radius: 100px; overflow: hidden; margin-bottom: 1.5rem; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #00f5a0, #00d2ff); width: 0%; transition: width 1s ease-in-out; box-shadow: 0 0 20px var(--accent-glow); }
+.progress-stats { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; opacity: 0.8; }
+
+.history-item { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.history-profit { font-family: 'JetBrains Mono', monospace; font-weight: 800; color: var(--accent-teal); font-size: 1.1rem; }
+
+.action-plan { border-top: 1px solid var(--border-color); padding-top: 2rem; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8; }
+.action-plan strong { color: var(--accent-teal); font-size: 1rem; margin-bottom: 1rem; display: block; }
+
+.footer { margin-top: 3rem; font-size: 0.7rem; color: var(--text-secondary); opacity: 0.4; letter-spacing: 0.05em; font-weight: 700; }
+
+/* Force Clean PDF Capture */
+.exporting-pdf, .exporting-pdf * {
+    animation: none !important;
+    transition: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .container { padding: 24px; border-radius: 0; border: none; }
+  .logo { font-size: 2.75rem; }
+  .sourcing-links { grid-template-columns: 1fr; }
+}
+
+/* PDF Printing Optimization */
+@media print {
+  body { background: white; color: black; padding: 0; }
+  .container { border: none; box-shadow: none; background: white; padding: 0; }
+  .tabs, .header, .badge, .footer, #trackerForm, #calculator-form, #post-calculate-actions { display: none !important; }
+  .logo { color: black; }
+  .logo span { color: #000; }
+  .product-card, .stat-item, .sourcing-card { border: 1px solid #eee; background: white !important; color: black !important; }
+  .stat-value, .product-info h3, .sourcing-title { color: black !important; }
+}
